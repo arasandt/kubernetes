@@ -1,0 +1,38 @@
+# apiVersion: extensions/v1beta1
+# kind: Ingress
+# metadata:
+#   name: iron-gallery-ingress
+# spec:
+#   # backend:
+#   #   serviceName: iron-gallery-service
+#   #   servicePort: 80
+#   # rules:
+#   # - host: "iron-gallery-braavos.com"
+#   #   http: /
+#   rules:
+#   - host: iron-gallery-braavos.com
+#     http:
+#       paths:
+#       - path: /
+#         pathType: Prefix
+#         backend:
+#           service:
+#             name: iron-gallery-service
+#             port:
+#               number: 80
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: iron-gallery-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+    - host: iron-gallery-braavos.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: iron-gallery-service
+              servicePort: 80

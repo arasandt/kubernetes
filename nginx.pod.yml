@@ -1,0 +1,72 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-nginx
+# namespace: dev
+  labels:
+    app: nginx
+    rel: stable
+spec:
+  # serviceAccount: dashboard-sa # to use another service account ofor the pod instead of default.
+  # tolerations:
+  # - key: "app"
+  #   operator: "Equals"
+  #   value: "blue"
+  #   effect: "NoSchedule"
+  containers: 
+  - name: my-nginx
+    image: nginx:alpine
+    volumeMounts:
+    - mountPath: /var/www/html
+      name: mypd
+    ports: 
+    - containerPort: 80
+    # env:
+    # - name: APP_COLOR
+    #   value: blue 
+    envFrom:
+    - configMapRef:
+        name: app-config
+    - secretRef:
+        name: app-secret
+  # subdomain:  mysql-h
+  # hostname: mysql-pod      
+  volumes:
+  - name: mypd
+    persistentVolumeClaim:
+      claimName: myclaim
+  #   hostPath:
+  #     path: /tmp/data
+
+# create -f nginx.pod.yml --save-config
+# quickly create a pod -> kubectl run mynginx --image=nginx --labels=tier=db
+# kubectl run --generator=run-pod/v1 www-1 --image=nginx:1.16
+# get into a POD ==> k exec -it webapp-color -- sh
+# get pods -o wide --namespace=kube-system --selector app=app1,tier=frontend --show-labels
+# get pods -l env=dev --no-headers | wc -l
+# edit pod <podname> -> this will update the POD. Use this instead of apply so that you don't have to delete the container
+# get pod my-nginx --dry-run -o yaml or json or name or wide
+# creat a yml file => run redis --image=redis --dry-run=client -o yaml
+# describe pod my-nginx
+# apply -f nginx.pod.yml
+# exec my-nginx -it sh
+# edit -f nginx.pod.yml
+# logs <podname>
+# exec <podname> -- cat /log/app.log
+# delete -f nginx.pod.yml
+# get nodes node01 --show-labels
+    livenessProbe: 
+      httpGet:
+        path: /index.html
+        port: 80
+      initialDelaySeconds: 15
+      timeoutSeconds: 2
+      periodSeconds: 5
+      failureThreshold: 1
+    readinessProbe:
+      httpGet:
+        path: /index.html
+        port: 80
+      initialDelaySeconds: 3
+      periodSeconds: 5
+      failureThreshold: 1      

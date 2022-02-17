@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dev
+
+  # instead of runnign this yml file you can create name space using 
+  # create namespace dev
+
+  # switch namespace using => config set-context $(kubectl config current-context) --namespace=dev
+
+  # to get pods from all namespaces using command => --all-namespaces
+
+  # get number of namespaces => get ns --no-headers | wc -l
+  # get pods in namespace => get -n <namespace> get pods --no-headers | wc -l

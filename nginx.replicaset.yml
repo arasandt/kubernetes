@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: my-nginx-rs
+  labels:
+    app: my-nginx
+spec:
+  replicas: 2
+  selector: 
+    matchLabels:
+      app: my-nginx
+  template:
+    metadata:
+      labels:
+        app: my-nginx
+    spec:      
+      containers: 
+      - name: my-nginx-container
+        image: nginx:alpine
+        ports: 
+        - containerPort: 80
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "200m"
+# scale a replicate set using
+# replace -f <yml file>  => by updating the replica in the yml file
+# scale --replicas=6 -f <yml file> => scale will not update the yml file.
+# scale --replicas=6 replicaset <replicaset name>

@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-nginx-deploy
+  labels:
+    app: my-nginx
+spec:
+  replicas: 2
+  selector: 
+    matchLabels:
+      app: my-nginx
+  template:
+    metadata:
+      labels:
+        app: my-nginx
+    spec:      
+      restartPolicy: Never
+      containers: 
+      - name: my-nginx-container
+        image: nginx:alpine
+        ports: 
+        - containerPort: 80
+        resources:
+          # requests:
+          #   memory: "128Mi"
+          #   cpu: "200m"
+          limits:
+            memory: "128Mi"
+            cpu: "200m"
+
+# quickly create deployment => create deployment httpd-frontend --image=httpd:2.4-alpine
+# then scale it using => scale deployment --replicas=3 httpd-frontend
+
+# rollout status or history or undo deployment/mydeployment
+# kubectl rollout history deployment nginx --revision=1
+# kubectl set image deployment nginx nginx=nginx:1.17 --record
+#set image deployment.apps/frontend simple-webapp=kodekloud/webapp-color:v3
+# kubectl rollout history deployment nginx --revision=4

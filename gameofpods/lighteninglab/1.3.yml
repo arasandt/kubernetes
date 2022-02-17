@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: time-check
+  namespace: dvl1987
+spec:
+  containers:
+  - name: time-check
+    image: busybox
+    command: ["/bin/sh", "-c", "while true; do date; sleep $TIME_FREQ;done > /opt/time/time-check.log"]
+    # command: [ "/bin/sh", "-c", "env" ]
+    envFrom:
+    - configMapRef:
+        name: time-config
+# Below will also work instead of envFrom
+#     env:
+#     - name: TIME_FREQ
+#       valueFrom:
+#         configMapKeyRef:
+#           name: time-config
+#           key: TIME_FREQ  
+    volumeMounts:
+    - name: mypd
+      mountPath: /opt/time
+  volumes:
+  - name: mypd
+    emptyDir: {}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: time-config
+  namespace: dvl1987
+data:
+  TIME_FREQ: "10"
+  

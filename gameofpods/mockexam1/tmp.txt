@@ -1,0 +1,14 @@
+k run messaging --image=redis: alpine -l tier=msg ==> this is to create label
+
+k -n marketing expose deployment redis --name messageing-service --port 6379 --target-port 6379
+
+k create cm cm-33392845 --from-literal=DB_NAME=SQL3322
+
+k crete secret generic <name> --from-literal=db_host=sql01
+
+securitycontext shold be under containers. runasUser is 0 and capabiliteis add for sys_time
+
+k create deployment redis --image=redis:alpine
+k expose deployment redis --target-port 6379 --port 6379
+
+k run sega --image=busybox --command sleep 3600 

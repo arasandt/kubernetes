@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db-deployment
+  namespace: vote
+spec:
+  selector: 
+    matchLabels:
+      app: db-container
+  template:
+    metadata:
+      name: db
+      labels:
+        app: db-container
+    spec:
+      containers:
+      - name: db
+        image: postgres:9.4
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: db-data
+        env:
+        - name: POSTGRES_HOST_AUTH_METHOD
+          value: trust
+      volumes:
+      - name: db-data
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db
+  namespace: vote
+spec:
+  selector: 
+    app: db-container
+  ports:
+  - port: 5432
+    targetPort: 5432
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: worker
+  namespace: vote
+spec:
+  selector: 
+    matchLabels:
+      app: worker-container
+  template:
+    metadata:
+      name: worker
+      labels:
+        app: worker-container
+    spec:
+      containers:
+      - name: worker
+        image: kodekloud/examplevotingapp_worker
+
+
+

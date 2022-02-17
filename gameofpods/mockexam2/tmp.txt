@@ -1,0 +1,42 @@
+k run --generator=deployment/apps.v1 my-webapp --image=nginx --lables='tier=frontend' --replicas=2
+k expose deployment my-webapp --name=front-end-service --tye=NodePort --target-port=80 --port=80 
+
+k taint node node01 'app_type=alpha:NoSchedule"
+get taints applied to all nodes ==> k get nodes -o=jsonpath='{.items[*].spec.taints}'
+more complex ==> '{range .items[*]}{.metadata.name}{"\t"}{.spec.taints}{"\n"}{end}'
+k run --generator=run-pod/v1 alpha --image=redis
+k get pod alpha -o wide
+
+q4
+k explain ingress --recursive | grep rules -A10
+curl -v http://asdasd:30093/video
+
+k get pod podname -o yaml --export > m.yaml
+
+q6
+k create job --image=<img name> whalesay
+command: ["cowsay"]
+args: ["i am going to ace CKAD"]
+test with docker --> docker container run --rm docker/whalesay cowsay i am going to ace CKAD!
+
+q7
+command: ["sleep","4800"]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
